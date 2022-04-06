@@ -40,11 +40,12 @@ class Folder {
 
 	createFolderElement() {
 		let conteneur = document.createElement("div")
+		conteneur.setAttribute('id', this.name);
 		let folderElement = document.createElement('a');
 
 		folderElement.textContent = this.name;
 		folderElement.setAttribute('href', this.id);
-		folderElement.setAttribute('id', this.name);
+
 		folderElement.classList.add('switch-tabs-fold');
 
 
@@ -53,7 +54,13 @@ class Folder {
 		renameBtn.textContent = "🖉"
 		renameBtn.classList.add("renameBtn")
 		renameBtn.addEventListener("click", () => {
-			
+			var inputElem = document.createElement("input")
+			var aBalise = document.querySelector(`#${this.name} > a`)
+
+			aBalise.replaceWith(inputElem)
+			inputElem.value = this.name
+			inputElem.select()
+
 		})
 
 		folderElement.appendChild(renameBtn)

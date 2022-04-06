@@ -17,11 +17,15 @@ function updateTabList() {
 			}
 		}
 		for (let folder of folderList) {
-			var folderElement = folder.createFolderElement()
-			currentTabs.appendChild(folderElement)
-			if (folder.unroll) {
-				folder.unrollChilds(folderElement)
-			}
+			// if (folder.name == "default") {
+			// 	folder.unrollChilds(currentTabs)
+			// } else {
+				var folderElement = folder.createFolderElement()
+				currentTabs.appendChild(folderElement)
+				if (folder.unroll) {
+					folder.unrollChilds(folderElement)
+				}
+			// }
 		}
 
 		tabsList.appendChild(currentTabs);
