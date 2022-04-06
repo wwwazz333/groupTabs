@@ -1,0 +1,59 @@
+html,
+body {
+	width: auto;
+	max-width: 600px;
+	min-width: 300px;
+}
+header {
+	width: 100%;
+	display: flex;
+	text-align: right;
+	flex-direction: row;
+	justify-content: space-between;
+	border-bottom: solid black 1px;
+	margin: 0;
+	padding: 0;
+}
+header h1 {
+	font-size: medium;
+	margin: 0 0 0 1rem;
+	padding: 0;
+}
+input#newFolderName {
+	width: 90%;
+	margin: auto;
+}
+
+.switch-tabs,
+.switch-tabs-fold {
+	display: block;
+	text-decoration: none;
+	color: black;
+	margin: 5px 10px;
+}
+.switch-tabs{
+	margin-left: 2rem;
+}
+.switch-tabs-fold {
+	color: red;
+}
+
+.switch-tabs:hover,
+.switch-tabs-fold:hover {
+	text-decoration: none;	
+	color: blueviolet;
+}
+.switch-tabs-fold:hover {
+	color: blue;
+}
+
+.panel {
+	margin: 5px;
+}
+
+
+
+.renameBtn{
+	background: none;
+	border: none;
+}
