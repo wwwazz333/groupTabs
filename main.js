@@ -1,13 +1,11 @@
 import { Folder, folderList } from './folder.js';
-import { getCurrentWindowTabs, switchTo } from './tabs.js';
+import { switchTo } from './tabs.js';
+
 
 import { updateTabList } from "./panel.js"
-
-
 document.addEventListener("DOMContentLoaded", updateTabList)
 
-
-
+/*####################################DEBUGING####################################*/
 document.getElementById('resetBtn').addEventListener('click', () => {
 	for (let folder of folderList) {
 		folder.unrollChilds(document.getElementById(folder.name))
@@ -21,40 +19,22 @@ document.getElementById('infoBtn').addEventListener('click', () => {
 			console.log("\t" + tab.title);
 		}
 	}
-	console.log("Tout");
-	getCurrentWindowTabs().then((tabs) => {
-		for (let tab of tabs) {
-			console.log("\t" + tab.title);
-		}
-	})
 	updateTabList()
 })
 
 
 /*####################################ADD FOLDER####################################*/
-function folderNameValide(folderName) {
-	if (folderList == "" || Folder.getFolderOfName(folderName) != null) {
-		return false
-	}
-	return true
-}
+
 function addFolder() {
 	var folderName = document.getElementById("newFolderName").value
-	folderName = folderName.trim()
-	if (folderNameValide(folderName)) {
-		var folder = new Folder("inconnue")
-		folder.name = folderName
-		folderList.push(folder)
+	if (Folder.addFolder(folderName)) {
 		Folder.saveFolders()
 		updateTabList()
 	} else {
 		alert("Le nom du dossier est invalide (nom interdit : un nom vide, un nom déjà existant et \"default\"")
 	}
-
 	document.getElementById("newFolderName").value = ""
-
 }
-// document.getElementById('addBtn').addEventListener('click', addFolder)
 document.getElementById("newFolderName").addEventListener("keypress", (e) => { if (e.key == "Enter") { addFolder(); } })
 
 
@@ -73,19 +53,15 @@ document.addEventListener("click", (active) => {
 		for (let folder of folderList) {
 			if (folder.id == foldId) {
 				if (!folder.unroll) {
-					folder.unrollChilds(active.target)
-					// folder.showTabs()
+					folder.unrollChilds(active.target.parentNode)
 				} else {
-					folder.rollChilds(active.target);
-					// folder.hideTabs()
+					folder.rollChilds(active.target.parentNode);
 				}
 			}
 		}
 
 		updateTabList()
 	}
-
-
 	active.preventDefault();
 });
 
@@ -114,9 +90,12 @@ document.addEventListener("dragend", (active) => {
 });
 document.addEventListener("dragenter", (active) => {
 	if (active.target.classList.contains('switch-tabs-fold')) {
+		targetDropingFolderName = active.target.parentNode.getAttribute('id')
+	} else if (active.target.firstChild.classList === undefined) {//do nothing
+	} else if (active.target.firstChild.classList.contains("switch-tabs-fold")) {
 		targetDropingFolderName = active.target.getAttribute('id')
-		console.log(active.target.getAttribute('id'));
 	} else {
 		targetDropingFolderName = null
 	}
+
 });

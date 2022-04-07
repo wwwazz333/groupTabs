@@ -1,4 +1,4 @@
-import { tabExistIn, createTab } from './tabs.js';
+import { tabExistIn, createTabElement } from './tabs.js';
 import { updateTabList } from './panel.js';
 
 var lastIdFolder = 0
@@ -10,6 +10,15 @@ class Folder {
 		this.tabList = new Array()
 		this.id = lastIdFolder++
 		this.unroll = false
+	}
+
+	setName(name) {
+		name = name.trim()
+		if (Folder.folderNameValide(name)) {
+			this.name = name
+			Folder.saveFolders()
+		}
+		return this.name
 	}
 
 	addTab(tab) {
@@ -41,29 +50,34 @@ class Folder {
 	createFolderElement() {
 		let conteneur = document.createElement("div")
 		conteneur.setAttribute('id', this.name);
-		let folderElement = document.createElement('a');
 
+		let folderElement = document.createElement('a');
 		folderElement.textContent = this.name;
 		folderElement.setAttribute('href', this.id);
-
 		folderElement.classList.add('switch-tabs-fold');
 
-
-		//manage btn
+		//managing btn
 		var renameBtn = document.createElement("button")
 		renameBtn.textContent = "🖉"
 		renameBtn.classList.add("renameBtn")
+		//event btn rename
 		renameBtn.addEventListener("click", () => {
 			var inputElem = document.createElement("input")
 			var aBalise = document.querySelector(`#${this.name} > a`)
+
+			//event input rename
+			inputElem.addEventListener("keypress", (ev) => {
+				if (ev.key == "Enter") {
+					this.setName(inputElem.value)
+					updateTabList()
+				}
+			})
 
 			aBalise.replaceWith(inputElem)
 			inputElem.value = this.name
 			inputElem.select()
 
 		})
-
-		folderElement.appendChild(renameBtn)
 
 		var delBtn = document.createElement("button")
 		delBtn.textContent = "Del"
@@ -74,8 +88,14 @@ class Folder {
 			updateTabList()
 		})
 
-		folderElement.appendChild(delBtn)
 
+		if (this.name == "default") {
+			delBtn.style.display = "none"
+			renameBtn.style.display = "none"
+		}
+
+		folderElement.appendChild(renameBtn)
+		folderElement.appendChild(delBtn)
 		conteneur.appendChild(folderElement)
 
 		return conteneur;
@@ -83,7 +103,7 @@ class Folder {
 
 	unrollChilds(folderElement) {
 		for (let tab of this.tabList) {
-			folderElement.appendChild(createTab(tab));//pour ajouter a folder un tab enfant que l'on créer
+			folderElement.appendChild(createTabElement(tab));//pour ajouter a folder un tab enfant que l'on créer
 		}
 		this.unroll = true;
 		Folder.saveFolders()
@@ -113,9 +133,8 @@ class Folder {
 	}
 
 	remove(indice) {
-		console.log(this.tabList.length + " removing : " + this.tabList[indice].title);
+		console.log("removing : " + this.tabList[indice].title);
 		this.tabList.splice(indice, 1)
-		console.log(this.tabList.length);
 	}
 
 	removeUnexistingTab(listWindowTabs) {
@@ -132,15 +151,12 @@ class Folder {
 
 
 	/*####################################STATIC FUNC####################################*/
-	static anyTabContains(tabCompare, folderList) {
-		for (let folder of folderList) {
-			if (folder.contains(tabCompare.id)) {
-				return true;
-			}
+	static folderNameValide(folderName) {
+		if (folderList == "" || Folder.getFolderOfName(folderName) != null) {
+			return false
 		}
-		return false;
+		return true
 	}
-
 	static loadFolders(listWindowTabs) {
 		folderList = JSON.parse(localStorage.getItem('folderList'))
 
@@ -177,6 +193,14 @@ class Folder {
 		}
 		return null
 	}
+	static anyTabContains(tabCompare, folderList) {
+		for (let folder of folderList) {
+			if (folder.contains(tabCompare.id)) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 	static getFolderOfName(name) {
 		for (let folder of folderList) {
@@ -187,12 +211,25 @@ class Folder {
 		return null
 	}
 
+
 	static removeFolderId(id) {
 		for (var i = 0; i < folderList.length; i++) {
 			if (id == folderList[i].id) {
 				folderList.splice(i, 1)
 			}
 		}
+	}
+
+
+	static addFolder(folderName) {
+		if (Folder.folderNameValide(folderName)) {
+			var folder = new Folder("")
+			folder.setName(folderName)
+			folderList.push(folder)
+			return true
+		}
+		return false
+
 	}
 }
 
