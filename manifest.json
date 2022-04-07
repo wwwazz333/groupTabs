@@ -1,25 +1,26 @@
 {
-  "browser_specific_settings": {
-	"gecko": {
-	  "strict_min_version": "58.0a1"
-	}
-  },
-  "background": {
-	  "page": "background.html"
-  },
-  "browser_action": {
-	"browser_style": true,
-	"default_title": "Group Tabs",
-	"default_popup": "tabs.html"
-  },
-  "description": "A list of methods you can perform on a tab.",
-  "homepage_url": "https://github.com/mdn/webextensions-examples/tree/master/tabs-tabs-tabs",
-  "manifest_version": 2,
-  "name": "Group Tabs",
-  "permissions": [
-	"tabs",
-  "storage",
-  "tabHide"
-  ],
-  "version": "1.0"
+	"browser_specific_settings": {
+		"gecko": {
+			"strict_min_version": "61"
+		}
+	},
+	"background": {
+		"page": "background.html"
+	},
+	"content_scripts": [
+		{
+			"matches": ["<all_urls>"],
+			"js": ["folderBar.js"]
+		}
+	],
+	"browser_action": {
+		"browser_style": true,
+		"default_title": "Group Tabs",
+		"default_popup": "tabs.html"
+	},
+	"description": "A Folder Tab creator & manager.",
+	"manifest_version": 2,
+	"name": "Group Tabs",
+	"permissions": ["tabs", "storage", "tabHide", "contextMenus"],
+	"version": "1.0"
 }

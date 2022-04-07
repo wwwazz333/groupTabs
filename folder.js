@@ -118,6 +118,7 @@ class Folder {
 	}
 
 	hideTabs() {
+		this.unroll = false;
 		for (var i = 0; i < this.tabList.length; i++) {
 			browser.tabs.hide(this.tabList[i].id).then(() => { }, (err) => {
 				this.remove(i);
@@ -125,6 +126,7 @@ class Folder {
 		}
 	}
 	showTabs() {
+		this.unroll = true;
 		for (var i = 0; i < this.tabList.length; i++) {
 			browser.tabs.show(this.tabList[i].id).then(() => { }, (err) => {
 				this.remove(i);

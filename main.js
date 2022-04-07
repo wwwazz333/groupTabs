@@ -1,5 +1,6 @@
 import { Folder, folderList } from './folder.js';
-import { switchTo } from './tabs.js';
+import { getCurrentWindowTabs, switchTo } from './tabs.js';
+
 
 
 import { updateTabList } from "./panel.js"

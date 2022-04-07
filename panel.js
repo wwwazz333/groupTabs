@@ -1,5 +1,6 @@
 import { Folder, folderList } from './folder.js';
 import { getCurrentWindowTabs } from './tabs.js';
+import { updateFolderBar } from "./com.js"
 
 
 function updateTabList() {
@@ -17,19 +18,17 @@ function updateTabList() {
 			}
 		}
 		for (let folder of folderList) {
-			// if (folder.name == "default") {
-			// 	folder.unrollChilds(currentTabs)
-			// } else {
-				var folderElement = folder.createFolderElement()
-				currentTabs.appendChild(folderElement)
-				if (folder.unroll) {
-					folder.unrollChilds(folderElement)
-				}
-			// }
+
+			var folderElement = folder.createFolderElement()
+			currentTabs.appendChild(folderElement)
+			if (folder.unroll) {
+				folder.unrollChilds(folderElement)
+			}
 		}
 
 		tabsList.appendChild(currentTabs);
 		showAndHideTabBis()
+		updateFolderBar()
 	});
 }
 
@@ -50,15 +49,15 @@ function showAndHideTabBis() {
 function showAndHideTab(folderSelected) {
 	for (let folder of folderList) {
 		if (folder.id != folderSelected.id) {
-			console.log("hide")
 			folder.hideTabs()
 		}
 		else {
-			console.log("show")
 			folder.showTabs()
 		}
 	}
 }
 
 
-export { updateTabList }
+
+
+export { updateTabList, showAndHideTab }

@@ -2,6 +2,10 @@ function getCurrentWindowTabs() {
 	return browser.tabs.query({ currentWindow: true })
 }
 
+function getActiveTabs() {
+	return browser.tabs.query({ currentWindow: true, active: true })
+}
+
 function createTabElement(tab) {
 	var element = document.createElement('a');
 
@@ -29,4 +33,4 @@ function switchTo(tabId) {
 	browser.tabs.update(tabId, { active: true })
 }
 
-export { getCurrentWindowTabs, createTabElement, tabExistIn, switchTo }
+export { getCurrentWindowTabs, getActiveTabs, createTabElement, tabExistIn, switchTo }
