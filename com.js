@@ -19,9 +19,9 @@ function updateFolderBar() {
 		var data = {}
 		for (let folder of folderList) {
 			if(folder.tabList.length > 0)
-				data[folder.name] = folder.tabList[0].id
+				data[folder.name] = folder.unroll
 			else
-				data[folder.name] = -1
+				data[folder.name] = false
 		}
 
 		data = JSON.stringify(data)

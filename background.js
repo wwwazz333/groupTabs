@@ -16,12 +16,9 @@ function updateCount(tabId, isOnRemoved) {
 				length--;
 			}
 
-			browser.browserAction.setBadgeText({ text: length.toString() });
-			if (length > 2) {
-				browser.browserAction.setBadgeBackgroundColor({ 'color': 'green' });
-			} else {
-				browser.browserAction.setBadgeBackgroundColor({ 'color': 'red' });
-			}
+			// browser.browserAction.setBadgeText({ text: length.toString() });
+			browser.browserAction.setBadgeBackgroundColor({ 'color': 'green' });
+			
 		});
 }
 
@@ -38,15 +35,6 @@ updateCount();
 
 /*####################################UPDATE FOLDERBAR####################################*/
 
-function onCreated() {
-	if (browser.runtime.lastError) {
-		console.log(`Error: ${browser.runtime.lastError}`);
-	} else {
-		console.log("Item created successfully");
-	}
-}
-
-
 
 browser.tabs.onUpdated.addListener(updateFolderBar)
 browser.tabs.onActivated.addListener(updateFolderBar)
@@ -57,10 +45,12 @@ browser.tabs.onUpdated.addListener(updateFolderBar)
 browser.runtime.onMessage.addListener((msg) => {
 	console.log("Folder cliqué : " + msg.folderName);
 	var folder = Folder.getFolderOfName(msg.folderName)
-	switchTo(folder.tabList[0].id)
+	if (folder.tabList.length == 0) {
+
+	} else {
+		switchTo(folder.tabList[0].id)
+	}
+
 	showAndHideTab(folder)
 	Folder.saveFolders()
-
-
-
 });

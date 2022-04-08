@@ -1,8 +1,16 @@
 {
 	"browser_specific_settings": {
 		"gecko": {
-			"strict_min_version": "61"
+			"strict_min_version": "73.0",
+			"id": "wwwazz333@gmail.com"
 		}
+	},
+	"icons": {
+		"48": "icons/icon.png",
+		"128": "icons/icon128.png",
+		"64": "icons/icon64.png",
+		"32": "icons/icon32.png",
+		"256": "icons/icon256.png"
 	},
 	"background": {
 		"page": "background.html"
@@ -21,6 +29,6 @@
 	"description": "A Folder Tab creator & manager.",
 	"manifest_version": 2,
 	"name": "Group Tabs",
-	"permissions": ["tabs", "storage", "tabHide", "contextMenus"],
+	"permissions": ["tabs", "storage", "tabHide"],
 	"version": "1.0"
 }

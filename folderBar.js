@@ -1,10 +1,9 @@
 const uniqueID = "a1Rkn^WqQamEISbc*3bI*9GXKq7rclBH9OoX^NQ1#oZZOT#kDKUvHmRpP*ZSIj^nZq2Ahg!@jEE79t7Kg$7%Q6ws4TqSCL&%jpv8!^co@ArA*#E8l29&01Hozsko7uUk"
+const uniqueIDBtn = "btna1Rkn^WqQamEISbc*3bI*9GXKq7rclBH9OoX^NQ1#oZZOT#kDKUvHmRpP*ZSIj^nZq2Ahg!@jEE79t7Kg$7%Q6ws4TqSCL&%jpv8!^co@ArA*#E8l29&01Hozsko7uUk"
 
 function switchTo(tabId) {
 
 }
-
-// document.body.style.marginTop = "100px"
 if (!document.getElementById(uniqueID)) {
 	document.body.style.marginTop = "25px"
 
@@ -18,41 +17,65 @@ if (!document.getElementById(uniqueID)) {
 	nav.style.border = "1px solid black";
 	nav.style.width = "100vw"
 	nav.style.height = "25px"
-	nav.style.zIndex = "9999999999"
+	nav.style.zIndex = "9999999998"
 	nav.style.color = "white"
 	nav.style.fontSize = "12px"
 	nav.style.display = "flex"
 	nav.style.direction = "row"
 	nav.style.alignItems = "center"
 	nav.style.justifyContent = "start"
+	nav.style.fontFamily = "Georgia, serif;arial;"
 
 
-	// var p = document.createElement("p")
-	// p.id = uniqueID + "P"
-	// p.style.margin = "0"
-	// p.style.padding = "0"
-	// p.style.display = "inline"
-	// p.textContent = "bad"
-	// if (window.localStorage.getItem("1234")) {
-	// 	p.textContent = "good"
-	// }
-
-	// nav.appendChild(p)
 
 
-	// var toggleBtn = document.createElement("button")
-	// toggleBtn.textContent = "Toggle"
-	// toggleBtn.addEventListener("click", () => {
-	// 	document.getElementById(uniqueID).style.display = "none"
-	// })
 
-	// nav.appendChild(toggleBtn)
 
+	var toggleBtn = document.createElement("button")
+	toggleBtn.textContent = "Toggle"
+	toggleBtn.id = uniqueIDBtn
+	toggleBtn.style.position = "fixed"
+	toggleBtn.style.top = "5px"
+	toggleBtn.style.right = "5px"
+	toggleBtn.style.zIndex = "9999999999"
+	toggleBtn.style.display = "inline-block"
+	toggleBtn.style.margin = "0"
+	toggleBtn.style.padding = "0"
+	toggleBtn.style.borderRadius = "50%"
+	toggleBtn.style.width = "30px"
+	toggleBtn.style.height = "30px"
+	toggleBtn.style.border = "none"
+	toggleBtn.style.background = "rgb(90, 96, 100)"
+	toggleBtn.innerHTML = "&#128447;"
+	toggleBtn.addEventListener("click", () => {
+		console.log("click");
+		if (document.getElementById(uniqueID).style.display == "none")
+			document.getElementById(uniqueID).style.display = "block"
+		else
+			document.getElementById(uniqueID).style.display = "none"
+	})
+
+	document.body.insertBefore(toggleBtn, document.body.firstChild);
 	document.body.insertBefore(nav, document.body.firstChild);
+
+	var allElem = document.querySelectorAll("*");
+	allElem.forEach((item) => {
+		if(item.style.position == "fixed" && item.id != uniqueID && item.id != uniqueIDBtn){
+			if(item.style.top && item.style.top.includes("px")){
+				let num = item.style.top.substring(0, item.style.top.length-2)
+				let pos = parseInt(num)
+				if(!isNaN(pos)){
+					if(pos < 25){
+						item.style.top = "25px"
+					}
+				}
+			}else{
+				item.style.top = "25px"
+			}
+		}
+	});
 }
 
-
-console.log("test Log");
 browser.runtime.onMessage.addListener(request => {
 	//remove se qu'il y a avant
 	var nav = document.getElementById(uniqueID)
@@ -68,21 +91,25 @@ browser.runtime.onMessage.addListener(request => {
 	data = JSON.parse(data)
 
 	for (let key in data) {
-		console.log(key);
 		var elem = document.createElement("button")
 		elem.addEventListener("click", (ev) => {
-			console.log("doit envoyer le msg à l'extension pour qu'elle redirige car la page ne peu pas le faire");
-
 			browser.runtime.sendMessage({ "msg": "je click sur un folder", "folderName": key });
 
 		})
 		elem.style.textDecoration = "none"
 		elem.style.color = "white"
 		elem.textContent = key
-		elem.style.background = "rgb(30, 30, 30)"
+		if (data[key])
+			elem.style.background = "rgb(30, 30, 129)"
+		else
+			elem.style.background = "rgb(30, 30, 30)"
 		elem.style.margin = "0 4px"
 		elem.style.padding = "3px"
+		elem.style.maxHeight = "22px"
 		elem.style.borderRadius = "8px"
+		elem.style.border = "none"
+		elem.style.fontFamily = "Georgia, serif;arial;"
+		elem.style.fontSize = "12px"
 
 		nav.appendChild(elem)
 	}
