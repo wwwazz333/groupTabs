@@ -15,6 +15,14 @@
 	"background": {
 		"page": "background.html"
 	},
+	"commands": {
+		"switch-folder": {
+			"suggested_key": {
+				"default": "Ctrl+Shift+F"
+			},
+			"description": "Switch to next folder"
+		}
+	},
 	"content_scripts": [
 		{
 			"matches": ["<all_urls>"],
@@ -30,5 +38,5 @@
 	"manifest_version": 2,
 	"name": "Group Tabs",
 	"permissions": ["tabs", "storage", "tabHide"],
-	"version": "1.0"
+	"version": "0.1"
 }

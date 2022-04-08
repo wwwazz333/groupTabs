@@ -18,7 +18,7 @@ function updateCount(tabId, isOnRemoved) {
 
 			// browser.browserAction.setBadgeText({ text: length.toString() });
 			browser.browserAction.setBadgeBackgroundColor({ 'color': 'green' });
-			
+
 		});
 }
 
@@ -54,3 +54,17 @@ browser.runtime.onMessage.addListener((msg) => {
 	showAndHideTab(folder)
 	Folder.saveFolders()
 });
+
+
+
+browser.commands.onCommand.addListener(function (command) {
+	var folder = folderList[0].nextFolder()
+	if (folder.tabList.length == 0) {
+
+	} else {
+		switchTo(folder.tabList[0].id)
+	}
+
+	showAndHideTab(folder)
+	Folder.saveFolders()
+  });

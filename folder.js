@@ -151,6 +151,14 @@ class Folder {
 		Folder.saveFolders()
 	}
 
+	nextFolder(){
+		for(let i = 0 ; i < folderList.length ; i++){
+			if (this == folderList[i]){
+				return folderList[(i+1)%folderList.length]
+			}
+		}
+		return null
+	}
 
 	/*####################################STATIC FUNC####################################*/
 	static folderNameValide(folderName) {
