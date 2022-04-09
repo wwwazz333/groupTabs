@@ -1,14 +1,31 @@
 const uniqueID = "a1Rkn^WqQamEISbc*3bI*9GXKq7rclBH9OoX^NQ1#oZZOT#kDKUvHmRpP*ZSIj^nZq2Ahg!@jEE79t7Kg$7%Q6ws4TqSCL&%jpv8!^co@ArA*#E8l29&01Hozsko7uUk"
 const uniqueIDBtn = "btna1Rkn^WqQamEISbc*3bI*9GXKq7rclBH9OoX^NQ1#oZZOT#kDKUvHmRpP*ZSIj^nZq2Ahg!@jEE79t7Kg$7%Q6ws4TqSCL&%jpv8!^co@ArA*#E8l29&01Hozsko7uUk"
 
-function switchTo(tabId) {
-
+function adaptePos(item) {
+	console.log(item.id);
+	if ((item.style.position == "fixed" || item.style.position == "absolute") && item.id != uniqueID && item.id != uniqueIDBtn) {
+		if (item.style.top && item.style.top.includes("px")) {
+			let num = item.style.top.substring(0, item.style.top.length - 2)
+			let pos = parseInt(num)
+			if (!isNaN(pos)) {
+				if (pos < 25) {
+					item.style.top = "25px"
+				}
+			}
+		} else {
+			item.style.top = "25px"
+		}
+	}
 }
+
+
 if (!document.getElementById(uniqueID)) {
 	document.body.style.marginTop = "25px"
 
 	var nav = document.createElement("div")
 	nav.id = uniqueID
+
+
 
 	nav.style.position = "fixed"
 	nav.style.top = "0"
@@ -47,33 +64,17 @@ if (!document.getElementById(uniqueID)) {
 	toggleBtn.style.border = "none"
 	toggleBtn.style.background = "rgb(90, 96, 100)"
 	toggleBtn.innerHTML = "&#128447;"
-	toggleBtn.addEventListener("click", () => {
-		console.log("click");
-		if (document.getElementById(uniqueID).style.display == "none")
-			document.getElementById(uniqueID).style.display = "block"
-		else
-			document.getElementById(uniqueID).style.display = "none"
-	})
+	toggleBtn.addEventListener("mouseup", toggleShowFolderBar)
+
 
 	document.body.insertBefore(toggleBtn, document.body.firstChild);
 	document.body.insertBefore(nav, document.body.firstChild);
 
+
 	var allElem = document.querySelectorAll("*");
-	allElem.forEach((item) => {
-		if(item.style.position == "fixed" && item.id != uniqueID && item.id != uniqueIDBtn){
-			if(item.style.top && item.style.top.includes("px")){
-				let num = item.style.top.substring(0, item.style.top.length-2)
-				let pos = parseInt(num)
-				if(!isNaN(pos)){
-					if(pos < 25){
-						item.style.top = "25px"
-					}
-				}
-			}else{
-				item.style.top = "25px"
-			}
-		}
-	});
+	allElem.forEach(adaptePos)
+
+	dragElement(document.getElementById(uniqueIDBtn));
 }
 
 browser.runtime.onMessage.addListener(request => {
@@ -119,6 +120,19 @@ browser.runtime.onMessage.addListener(request => {
 
 
 
+function toggleShowFolderBar() {
+	if (document.getElementById(uniqueID).style.display == "none") {
+		document.getElementById(uniqueID).style.display = "block"
+		document.body.style.marginTop = "25px"
+	}
+	else {
+		document.getElementById(uniqueID).style.display = "none"
+		document.body.style.marginTop = "0px"
+	}
+}
+
+
+
 
 // var folders = {}
 // folders["Yt"] = "youtube.com"
@@ -132,3 +146,49 @@ browser.runtime.onMessage.addListener(request => {
 // 	document.getElementById(uniqueID).appendChild(fold)
 // }
 
+
+
+function dragElement(elmnt) {
+	var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+
+
+	var hadMove = false
+	elmnt.onmousedown = dragMouseDown;
+
+
+
+	function dragMouseDown(e) {
+		e = e || window.event;
+		e.preventDefault();
+		// get the mouse cursor position at startup:
+		pos3 = e.clientX;
+		pos4 = e.clientY;
+		document.onmouseup = closeDragElement;
+		// call a function whenever the cursor moves:
+		document.onmousemove = elementDrag;
+	}
+
+	function elementDrag(e) {
+		hadMove = true
+		e = e || window.event;
+		e.preventDefault();
+		// calculate the new cursor position:
+		pos1 = pos3 - e.clientX;
+		pos2 = pos4 - e.clientY;
+		pos3 = e.clientX;
+		pos4 = e.clientY;
+		// set the element's new position:
+		elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+		elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+	}
+
+	function closeDragElement() {
+		/* stop moving when mouse button is released:*/
+		if (hadMove) {
+			toggleShowFolderBar()
+			hadMove = false
+		}
+		document.onmouseup = null;
+		document.onmousemove = null;
+	}
+}

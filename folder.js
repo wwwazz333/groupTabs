@@ -45,6 +45,8 @@ class Folder {
 		}
 		dstFolder.addTab(this.tabList[localTabIndice])
 		this.remove(localTabIndice)
+
+		Folder.saveFolders()
 	}
 
 	createFolderElement() {
@@ -68,7 +70,8 @@ class Folder {
 			//event input rename
 			inputElem.addEventListener("keypress", (ev) => {
 				if (ev.key == "Enter") {
-					this.setName(inputElem.value)
+					var fold = Folder.getFolderOfName(this.name)
+					fold.setName(inputElem.value)
 					updateTabList()
 				}
 			})

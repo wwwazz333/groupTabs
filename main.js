@@ -2,7 +2,6 @@ import { Folder, folderList } from './folder.js';
 import { getCurrentWindowTabs, switchTo } from './tabs.js';
 
 
-
 import { updateTabList } from "./panel.js"
 document.addEventListener("DOMContentLoaded", updateTabList)
 
@@ -20,7 +19,7 @@ document.getElementById('infoBtn').addEventListener('click', () => {
 			console.log("\t" + tab.title);
 		}
 	}
-	updateTabList()
+	// updateTabList()
 })
 
 
